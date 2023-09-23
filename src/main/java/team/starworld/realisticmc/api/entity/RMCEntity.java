@@ -2,8 +2,12 @@ package team.starworld.realisticmc.api.entity;
 
 import earth.terrarium.ad_astra.common.util.ModUtils;
 import lombok.Getter;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import team.starworld.realisticmc.util.ArmorUtils;
+import team.starworld.realisticmc.util.BlockUtils;
+import team.starworld.realisticmc.util.MathUtils;
+
+import java.util.ArrayList;
 
 import static earth.terrarium.ad_astra.common.util.ModUtils.getPlanetGravity;
 
@@ -22,25 +26,30 @@ public class RMCEntity {
         } else return getPlanetGravity(entity.level());
     }
 
+    public float getBaseWaterPressure () {
+        if (!entity.isInFluidType()) return 0;
+        var value = BlockUtils.getWaterPressure(entity.blockPosition(), entity.level(), getBaseGravity());
+        if (entity.isInLava()) value = value * 3.5f;
+        return value;
+    }
+
     public float getWaterPressure () {
         if (!entity.isInFluidType()) return 0;
-        var water = 0;
-        var pos = entity.blockPosition();
-        var level = entity.level();
-        while (true) {
-            var block = level.getBlockEntity(pos);
-            if (block == null) break;
-            var blockState = block.getBlockState();
-            var fluidState = blockState.getFluidState();
-            try {
-                if (fluidState.isSource()) break;
-            } catch (Throwable ignored) {
-                return water;
-            }
-            pos = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
-            water += 1;
+        float base = getBaseWaterPressure();
+        var numbers = new ArrayList <Float> ();
+        var length = 0;
+        for (var slot : entity.getArmorSlots()) {
+            var item = slot.getItem();
+            length ++;
+            var number = ArmorUtils.getArmorWaterPressureResistant(item);
+            if (number.getType() == MathUtils.TypedNumber.Type.PROPORTION) numbers.add(base - Math.abs(base * number.getValue().floatValue()));
+            else numbers.add(base - number.getValue().floatValue());
         }
-        return (water / 10f) * getBaseGravity();
+        var value = 0;
+        for (var i : numbers) value += i < 0 ? 0 : i;
+        value = value / length;
+        var result = length >= 4 ? value : base;
+        return result < 0 ? 0 : result;
     }
 
 }

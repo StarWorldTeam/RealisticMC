@@ -3,15 +3,18 @@ package team.starworld.realisticmc.event;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.starworld.realisticmc.config.ConfigHolder;
+import team.starworld.realisticmc.api.entity.RMCPlayer;
+import team.starworld.realisticmc.config.ConfigWrapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +29,7 @@ public class PlayerEvent {
 
         public static Optional <ItemStack> canEat (Player player, ItemStack stack) {
             if (stack.getUseAnimation() == UseAnim.DRINK || stack.getUseAnimation() == UseAnim.EAT) {
-                List <String> items = Arrays.stream(ConfigHolder.INSTANCE.configGameRule.disableEatUnderTheseArmors).toList();
+                List <String> items = Arrays.stream(ConfigWrapper.getInstance().gameRule.disableEatUnderTheseArmors).toList();
                 for (var configItem : items) {
                     for (var armor : player.getArmorSlots()) {
                         try {
@@ -62,6 +65,15 @@ public class PlayerEvent {
         player.sendSystemMessage(Component.translatable("action.realisticmc.eat_under_armors", canEat.get().getDisplayName(), item.getDisplayName()));
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.FAIL);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick (TickEvent.PlayerTickEvent event) {
+        var player = new RMCPlayer(event.player);
+        var playerEntity = event.player;
+        if (!playerEntity.hasEffect(MobEffects.WATER_BREATHING) && player.getWaterPressure() > 2 && ((playerEntity.level().getGameTime() % 20) == 0) && !playerEntity.isCreative()) {
+            playerEntity.setHealth(playerEntity.getHealth() - 1);
+        }
     }
 
 }

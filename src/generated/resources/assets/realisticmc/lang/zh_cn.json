@@ -1,6 +1,3 @@
 {
-    "config.screen.realisticmc": "真实的Minecraft",
-    "config.realisticmc.option.configGameRule": "游戏设定",
-    "config.realisticmc.option.disableEatUnderTheseArmors": "禁止穿这些盔甲时食用食品",
     "action.realisticmc.eat_under_armors": "§c移除你的§7%s§c才能使用§7%s§c！"
 }
