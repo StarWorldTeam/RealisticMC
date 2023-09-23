@@ -27,6 +27,11 @@ public class RMCRegistries {
         public void initializeAddon () {}
 
         @Override
+        public String addonModId () {
+            return MODID;
+        }
+
+        @Override
         public void registerRecipeTypes () {
             RMCRecipeTypes.init();
         }
