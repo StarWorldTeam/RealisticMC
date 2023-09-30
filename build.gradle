@@ -114,11 +114,18 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Dependencies
+    implementation fg.deobf("com.tterrag.registrate:Registrate:${dependency_registrate_version}")
+    jarJar ("com.tterrag.registrate:Registrate:${dependency_registrate_version}") {
+        jarJar.ranged(it, '[MC1.19.3-1.1.10,)')
+    }
+    implementation fg.deobf("curse.maven:create-328085:${dependency_create_version}")
     implementation fg.deobf("curse.maven:cloth-config-348521:${dependency_cloth_config_version}")
     implementation fg.deobf("curse.maven:ad-astra-635042:${dependency_ad_astra_version}")
-    implementation "com.tterrag.registrate:Registrate:${dependency_registrate_version}"
+    implementation fg.deobf("curse.maven:botarium-704113:${dependency_botarium_version}")
     implementation fg.deobf("curse.maven:gregtechceu-modern-890405:${dependency_gtceu_version}")
     implementation fg.deobf("curse.maven:ldlib-626676:${dependency_ldlib_version}")
+
+    // Annotation Processor
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }

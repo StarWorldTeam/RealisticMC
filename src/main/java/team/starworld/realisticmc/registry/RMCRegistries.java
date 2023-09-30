@@ -32,17 +32,22 @@ public class RMCRegistries {
         }
 
         @Override
+        public void registerMaterials () {}
+
+        @Override
         public void registerRecipeTypes () {
-            RMCRecipeTypes.init();
+            RMCRecipeTypes.GTRecipeTypes.init();
         }
 
         @Override
         public void registerMachines () {
-            RMCMachines.init();
+            RMCMachines.GTMachines.init();
         }
 
         @Override
-        public void initializeRecipes (Consumer <FinishedRecipe> provider) { RMCRecipes.init(); }
+        public void initializeRecipes (Consumer <FinishedRecipe> provider) {
+            RMCMachineRecipes.initGTRecipes(provider);
+        }
 
     }
 

@@ -13,6 +13,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import team.starworld.realisticmc.api.data.RMCDamages;
 import team.starworld.realisticmc.api.entity.RMCPlayer;
 import team.starworld.realisticmc.config.ConfigWrapper;
 
@@ -71,8 +72,11 @@ public class PlayerEvent {
     public static void onPlayerTick (TickEvent.PlayerTickEvent event) {
         var player = new RMCPlayer(event.player);
         var playerEntity = event.player;
-        if (!playerEntity.hasEffect(MobEffects.WATER_BREATHING) && player.getWaterPressure() > 2 && ((playerEntity.level().getGameTime() % 20) == 0) && !playerEntity.isCreative()) {
-            playerEntity.setHealth(playerEntity.getHealth() - 1);
+        if (!playerEntity.hasEffect(MobEffects.WATER_BREATHING) && player.getWaterPressure() > 2 && ((playerEntity.level().getGameTime() % 40) == 0) && !player.getPlayer().isCreative() && !player.getPlayer().isSpectator()) {
+            playerEntity.hurt(
+                RMCDamages.getDamageSource(player.getPlayer().level(), RMCDamages.WATER_PRESSURE),
+                4
+            );
         }
     }
 

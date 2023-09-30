@@ -39,11 +39,10 @@ public class RMCEntity {
         var numbers = new ArrayList <Float> ();
         var length = 0;
         for (var slot : entity.getArmorSlots()) {
-            var item = slot.getItem();
             length ++;
-            var number = ArmorUtils.getArmorWaterPressureResistant(item);
-            if (number.getType() == MathUtils.TypedNumber.Type.PROPORTION) numbers.add(base - Math.abs(base * number.getValue().floatValue()));
-            else numbers.add(base - number.getValue().floatValue());
+            var number = ArmorUtils.getArmorWaterPressureResistant(slot);
+            if (number.getType() == MathUtils.TypedFloatNumber.Type.PROPORTION) numbers.add(base - Math.abs(base * number.getValue()));
+            else numbers.add(base - number.getValue());
         }
         var value = 0;
         for (var i : numbers) value += i < 0 ? 0 : i;

@@ -1,3 +1,18 @@
 {
-    "action.realisticmc.eat_under_armors": "§cRemove your §7%s§c to use §7%s§c!"
+    "action.realisticmc.eat_under_armors": "§cRemove your §7%s§c to use §7%s§c!",
+    "item.realisticmc.diving_mask": "Diving Mask",
+    "item.realisticmc.diving_suit": "Diving Suit",
+    "item.realisticmc.diving_leggings": "Diving Leggings",
+    "item.realisticmc.diving_boots": "Diving Boots",
+    "item.realisticmc.diving_gear_fabric": "Diving Gear Fabric",
+    "item.realisticmc.creative_oxygen_can": "Creative Oxygen Can",
+    "item.realisticmc.custom_skin_helmet": "Camouflage Helmet",
+    "item.realisticmc.custom_skin_chestplate": "Camouflage Chestplate",
+    "item.realisticmc.custom_skin_leggings": "Camouflage Leggings",
+    "item.realisticmc.custom_skin_boots": "Camouflage Boots",
+    "tooltip.realisticmc.diving_suit_oxygen_stored": "§7[Oxygen Stored] §6%s§7/§6%s",
+    "death.attack.realisticmc.water_pressure": "%1$s was flattened by water pressure",
+    "block.gtceu.ev_rmc_electric_loom": "Electric Loom - EV",
+    "block.gtceu.hv_rmc_electric_loom": "Electric Loom - HV",
+    "realisticmc.electric_loom": "Electric Loom"
 }
