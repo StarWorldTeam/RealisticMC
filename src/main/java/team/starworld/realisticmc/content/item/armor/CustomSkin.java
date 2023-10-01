@@ -9,6 +9,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +31,7 @@ public class CustomSkin extends ArmorItem implements ComponentItem {
     public static final List <ResourceLocation> SKINS = new ArrayList <> (
         List.of(
             DEFAULT_SKIN,
-            rl("textures/models/armor/custom_skin/hazmat"),
+            rl("textures/models/armor/hazmat_gear"),
             rl("textures/models/armor/custom_skin/space_suit")
         )
     );
@@ -48,6 +50,7 @@ public class CustomSkin extends ArmorItem implements ComponentItem {
     @Override
     public void setDamage (ItemStack stack, int damage) { super.setDamage(stack, 0); }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient (@NotNull Consumer <IClientItemExtensions> consumer) {
         consumer.accept(DivingGear.Rendering.INSTANCE);

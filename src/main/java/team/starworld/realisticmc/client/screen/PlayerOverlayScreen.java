@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import team.starworld.realisticmc.config.ConfigWrapper;
 
 import static team.starworld.realisticmc.registry.RMCRegistries.rl;
 
@@ -18,11 +17,9 @@ public class PlayerOverlayScreen {
 
     public static boolean doesNotNeedOxygen = true;
 
-    public static boolean shouldRenderDivingMaskHud = false;
 
     public static final ResourceLocation OXYGEN_TANK_EMPTY_TEXTURE = rl("textures/gui/overlay/diving_gear_oxygen_empty.png");
     public static final ResourceLocation OXYGEN_TANK_FULL_TEXTURE = rl("textures/gui/overlay/diving_gear_oxygen_full.png");
-    public static final ResourceLocation DIVING_MASK_HUD = rl("textures/misc/diving_mask_hud.png");
 
     public static double oxygenRatio = 0;
 
@@ -35,9 +32,6 @@ public class PlayerOverlayScreen {
         if (player == null) return;
         if (player.isSpectator()) {
             return;
-        }
-        if (ConfigWrapper.getInstance().client.showScreenMaskInDivingGear && shouldRenderDivingMaskHud && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-            GuiUtil.drawVertical(graphics, 0, 0, screenWidth, screenHeight, DIVING_MASK_HUD, 1);
         }
         if (shouldRenderOxygen && !minecraft.options.renderDebug) {
             poseStack.pushPose();

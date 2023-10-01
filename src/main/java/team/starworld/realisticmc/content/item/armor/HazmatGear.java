@@ -1,56 +1,64 @@
 package team.starworld.realisticmc.content.item.armor;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import earth.terrarium.ad_astra.common.item.FluidContainingItem;
 import earth.terrarium.ad_astra.common.registry.ModTags;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import earth.terrarium.botarium.common.item.ItemStackHolder;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.starworld.realisticmc.api.item.armor.RMCArmor;
-import team.starworld.realisticmc.api.item.armor.model.ArmorFullModel;
+import team.starworld.realisticmc.config.ConfigWrapper;
 import team.starworld.realisticmc.util.ArmorUtils;
 import team.starworld.realisticmc.util.ItemStackUtils;
 import team.starworld.realisticmc.util.MathUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
-
-public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingItem {
+public class HazmatGear extends ArmorItem implements RMCArmor, FluidContainingItem {
 
     protected ResourceLocation name;
 
-    public static final AttributeModifier SWIMMING_SPEED_MODIFIER = new AttributeModifier(UUID.fromString("89b46e4a-5feb-11ee-8c99-0242ac120002"), "diving_gear_swimming_speed", 3, AttributeModifier.Operation.MULTIPLY_BASE);
 
-    public DivingGear (Type type, ResourceLocation name) {
+    public static List <MobEffect> getEffects () {
+        ArrayList <MobEffect> list = new ArrayList <> ();
+        for (var id : ConfigWrapper.getInstance().gameRule.hazmatRemoveEffects) {
+            try {
+                var location = new ResourceLocation(id.contains(":") ? id : "minecraft:" + id);
+                list.add(ForgeRegistries.MOB_EFFECTS.getValue(location));
+            } catch (Throwable ignored) {}
+        }
+        return list;
+    }
+
+    public HazmatGear (Type type, ResourceLocation name) {
         super(ArmorMaterials.DIAMOND, type, new Item.Properties().durability(Integer.MAX_VALUE));
         this.name = name;
     }
 
     public static boolean hasFullGear (LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DivingGear &&
-            entity.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DivingGear;
+        return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof HazmatGear &&
+            entity.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof HazmatGear &&
+            entity.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof HazmatGear &&
+            entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof HazmatGear;
     }
 
     @Override
@@ -65,21 +73,7 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient (Consumer <IClientItemExtensions> consumer) {
-        consumer.accept(Rendering.INSTANCE);
-    }
-
-    public static class Rendering implements IClientItemExtensions {
-
-        public static final Rendering INSTANCE = new Rendering();
-
-        private Rendering () {}
-
-
-        @Override
-        public @NotNull HumanoidModel <?> getHumanoidArmorModel (LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel <?> original) {
-            return equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET ? original : ArmorFullModel.INSTANCE.get();
-        }
-
+        consumer.accept(DivingGear.Rendering.INSTANCE);
     }
 
     @Override
@@ -88,14 +82,10 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     }
 
     @Override
-    public int getBarWidth (@NotNull ItemStack stack) {
-        return Math.round(((float) getFluidAmount(stack) * 13f / (float) getTankSize()));
-    }
+    public int getBarWidth (@NotNull ItemStack stack) { return Math.round(((float) getFluidAmount(stack) * 13f / (float) getTankSize())); }
 
     @Override
-    public int getBarColor (@NotNull ItemStack stack) {
-        return 0xA8D8F9;
-    }
+    public int getBarColor (@NotNull ItemStack stack) { return 0xA8D8F9; }
 
     @Override
     public boolean isBarVisible (@NotNull ItemStack stack) {
@@ -103,35 +93,21 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     }
 
     @Override
-    public Multimap <Attribute, AttributeModifier> getAttributeModifiers (EquipmentSlot slot, ItemStack stack) {
-        if (this.getType() == Type.BOOTS && slot == EquipmentSlot.FEET) {
-            return Multimaps.forMap(
-                Map.of(
-                    ForgeMod.SWIM_SPEED.get(), SWIMMING_SPEED_MODIFIER
-                )
-            );
-        }
-        return super.getAttributeModifiers(slot, stack);
-    }
-
-    @Override
     public void onArmorTick (ItemStack stack, Level level, Player player) {
         setDamage(stack, 0);
-        if (!(player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DivingGear) || !(this.getType() == Type.CHESTPLATE)) return;
-        var oxygen = getFluidAmount(stack);
-        var consume = 0L;
-        if (player.level().getGameTime() % 35 == 0 && oxygen > 1 && player.getAirSupply() < player.getMaxAirSupply()) {
-            if ((player.getMaxAirSupply() - player.getAirSupply()) * 2L > oxygen) {
-                player.setAirSupply((int) Math.min(oxygen / 2, player.getMaxAirSupply()));
-                consume = oxygen;
-            } else {
-                consume = ((player.getMaxAirSupply() - player.getAirSupply()) * 2L) / 15;
-                player.setAirSupply(player.getMaxAirSupply());
+        if (!hasFullGear(player)) return;
+        if (stack.getItem() instanceof HazmatGear gear && gear.getType() == Type.CHESTPLATE) {
+            if (player.level().getGameTime() % 40 == 0 && gear.getFluidAmount(stack) <= 0) {
+                player.hurt(player.damageSources().drown(), 2);
             }
-            var holder = new ItemStackHolder(stack);
-            extract(holder, FluidHooks.newFluidHolder(getFluid(holder.getStack()), consume, null));
+            if (player.level().getGameTime() % 40 == 0 && gear.getFluidAmount(stack) > 0) {
+                getEffects().forEach(player::removeEffect);
+                player.clearFire();
+                player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 80, 255, false, false));
+                var holder = new ItemStackHolder(stack);
+                extract(holder, FluidHooks.newFluidHolder(getFluid(holder.getStack()), 1, null));
+            }
         }
-
     }
 
     @Override

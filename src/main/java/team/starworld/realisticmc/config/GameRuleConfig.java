@@ -16,7 +16,8 @@ public class GameRuleConfig implements ConfigData {
 
     public String[] disableEatUnderTheseArmors = new String[] {
         "create:copper_diving_helmet", "create:netherite_diving_helmet",
-        "ad_astra:space_helmet", "ad_astra:netherite_space_helmet", "ad_astra:jet_suit_helmet"
+        "ad_astra:space_helmet", "ad_astra:netherite_space_helmet", "ad_astra:jet_suit_helmet",
+        "realisticmc:diving_mask", "realisticmc:hazmat_respirator"
     };
 
     public String[] waterPressureResistantArmors = new String[] {
@@ -27,6 +28,11 @@ public class GameRuleConfig implements ConfigData {
         "ad_astra:jet_suit_helmet=100%", "ad_astra:space_suit=80%", "ad_astra:space_pants=80%", "ad_astra:space_boots=80%",
         "ad_astra:netherite_space_suit=100%", "ad_astra:netherite_space_pants=100%", "ad_astra:netherite_space_boots=100%",
         "ad_astra:jet_suit=100%", "ad_astra:jet_suit_pants=100%", "ad_astra:jet_suit_boots=100%",
+    };
+
+    public String[] hazmatRemoveEffects = new String[] {
+        "slowness", "instant_damage", "nausea", "mining_fatigue", "blindness", "weakness", "poison", "wither",
+        "darkness"
     };
 
     public static Map <Item, String> getWaterPressureResistantArmors () {
