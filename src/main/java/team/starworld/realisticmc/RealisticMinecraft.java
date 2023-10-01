@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 import team.starworld.realisticmc.api.item.ComponentItem;
 import team.starworld.realisticmc.api.item.armor.model.ArmorFullModel;
@@ -49,10 +51,9 @@ public class RealisticMinecraft {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::entityLayerSetup);
 
-        try {
-            Class <?>  minecraft = net.minecraft.client.Minecraft.class;
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             MinecraftForge.EVENT_BUS.addListener(this::onRegisterClientHud);
-        } catch (Throwable ignored) {}
+        }
     }
 
     private void entityLayerSetup (final EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -77,6 +78,7 @@ public class RealisticMinecraft {
         items.forEach(event::accept);
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void onRegisterClientHud (RenderGuiEvent.Post event) {
         PlayerOverlayScreen.render(event.getGuiGraphics(), event.getPartialTick());
     }
