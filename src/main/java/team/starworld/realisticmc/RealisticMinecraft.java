@@ -9,6 +9,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import team.starworld.realisticmc.api.item.ComponentItem;
 import team.starworld.realisticmc.api.item.armor.model.ArmorFullModel;
+import team.starworld.realisticmc.client.screen.PlayerOverlayScreen;
 import team.starworld.realisticmc.config.ConfigWrapper;
 import team.starworld.realisticmc.registry.RMCRegistrate;
 import team.starworld.realisticmc.registry.RMCRegistries;
@@ -46,6 +48,7 @@ public class RealisticMinecraft {
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::entityLayerSetup);
+        MinecraftForge.EVENT_BUS.addListener(this::onRegisterClientHud);
 
     }
 
@@ -69,6 +72,10 @@ public class RealisticMinecraft {
             }
         }
         items.forEach(event::accept);
+    }
+
+    private void onRegisterClientHud (RenderGuiEvent.Post event) {
+        PlayerOverlayScreen.render(event.getGuiGraphics(), event.getPartialTick());
     }
 
     @SubscribeEvent

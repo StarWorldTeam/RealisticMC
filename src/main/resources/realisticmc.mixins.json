@@ -1,15 +1,16 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "team.starworld.realisticmc.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "realisticmc.refmap.json",
-  "mixins": [
-  ],
-  "client": [
-    "client.DebugHud"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+    "required": true,
+    "minVersion": "0.8",
+    "package": "team.starworld.realisticmc.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "realisticmc.refmap.json",
+    "mixins": [
+    ],
+    "client": [
+        "client.DebugHud",
+        "client.LocalPlayerMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
 }

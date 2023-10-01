@@ -14,5 +14,8 @@
     "death.attack.realisticmc.water_pressure": "%1$s被水压扁了",
     "block.gtceu.ev_rmc_electric_loom": "电动纺织机 - EV",
     "block.gtceu.hv_rmc_electric_loom": "电动纺织机 - HV",
-    "realisticmc.electric_loom": "电动纺织机"
+    "realisticmc.electric_loom": "电动纺织机",
+    "gui.realisticmc.planet.planet_deep_ocean": "深海星",
+    "gui.realisticmc.text.alien_galaxy": "外星系",
+    "biome.realisticmc.void": "虚无"
 }

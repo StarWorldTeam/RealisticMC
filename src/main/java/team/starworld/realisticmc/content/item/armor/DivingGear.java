@@ -1,24 +1,33 @@
 package team.starworld.realisticmc.content.item.armor;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import earth.terrarium.ad_astra.common.item.FluidContainingItem;
 import earth.terrarium.ad_astra.common.registry.ModTags;
+import earth.terrarium.ad_astra.common.util.OxygenUtils;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import earth.terrarium.botarium.common.item.ItemStackHolder;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.starworld.realisticmc.RealisticMinecraft;
 import team.starworld.realisticmc.api.item.armor.RMCArmor;
 import team.starworld.realisticmc.api.item.armor.model.ArmorFullModel;
 import team.starworld.realisticmc.registry.RMCItems;
@@ -27,6 +36,8 @@ import team.starworld.realisticmc.util.ItemStackUtils;
 import team.starworld.realisticmc.util.MathUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
@@ -35,9 +46,16 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
 
     protected ResourceLocation name;
 
+    public static final AttributeModifier SWIMMING_SPEED_MODIFIER = new AttributeModifier(UUID.fromString("89b46e4a-5feb-11ee-8c99-0242ac120002"), "diving_gear_swimming_speed", 3, AttributeModifier.Operation.MULTIPLY_BASE);
+
     public DivingGear (Type type, ResourceLocation name) {
         super(ArmorMaterials.DIAMOND, type, new Item.Properties().durability(Integer.MAX_VALUE));
         this.name = name;
+    }
+
+    public static boolean hasFullGear (LivingEntity entity) {
+        return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DivingGear &&
+            entity.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DivingGear;
     }
 
     @Override
@@ -75,8 +93,38 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     }
 
     @Override
+    public int getBarWidth (@NotNull ItemStack stack) {
+        return Math.round(((float) getFluidAmount(stack) * 13f / (float) getTankSize()));
+    }
+
+    @Override
+    public int getBarColor (@NotNull ItemStack stack) {
+        return 0xA8D8F9;
+    }
+
+    @Override
+    public boolean isBarVisible (@NotNull ItemStack stack) {
+        return getFluidAmount(stack) != getTankSize();
+    }
+
+    @Override
+    public Multimap <Attribute, AttributeModifier> getAttributeModifiers (EquipmentSlot slot, ItemStack stack) {
+        if (this.getType() == Type.BOOTS && slot == EquipmentSlot.FEET) {
+            return Multimaps.forMap(
+                Map.of(
+                    ForgeMod.SWIM_SPEED.get(), SWIMMING_SPEED_MODIFIER
+                )
+            );
+        }
+        return super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
     public void onArmorTick (ItemStack stack, Level level, Player player) {
         setDamage(stack, 0);
+        if (getType() == Type.HELMET && player.isInFluidType()) {
+            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 20));
+        }
         if (!player.getItemBySlot(EquipmentSlot.HEAD).is(RMCItems.DIVING_MASK.get()) || !(this.getType() == Type.CHESTPLATE)) return;
         var oxygen = getFluidAmount(stack);
         var consume = 0L;
@@ -90,7 +138,7 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
             }
             var holder = new ItemStackHolder(stack);
             extract(holder, FluidHooks.newFluidHolder(getFluid(holder.getStack()), consume, null));
-            if (holder.isDirty()) player.setItemSlot(EquipmentSlot.CHEST, holder.getStack());
+            RealisticMinecraft.LOGGER.info("%s-%s".formatted(OxygenUtils.entityHasOxygen(player.level(), player), !player.isInFluidType()));
         }
 
     }
@@ -102,7 +150,7 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
 
     @Override
     public long getTankSize () {
-        return this.getType() == Type.CHESTPLATE ? 64000 : 0;
+        return this.getType() == Type.CHESTPLATE ? 640000 : 0;
     }
 
     @Override

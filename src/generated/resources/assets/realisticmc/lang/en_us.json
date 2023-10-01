@@ -14,5 +14,8 @@
     "death.attack.realisticmc.water_pressure": "%1$s was flattened by water pressure",
     "block.gtceu.ev_rmc_electric_loom": "Electric Loom - EV",
     "block.gtceu.hv_rmc_electric_loom": "Electric Loom - HV",
-    "realisticmc.electric_loom": "Electric Loom"
+    "realisticmc.electric_loom": "Electric Loom",
+    "gui.realisticmc.planet.planet_deep_ocean": "Deep Ocean Planet",
+    "gui.realisticmc.text.alien_galaxy": "Alien Galaxy",
+    "biome.realisticmc.void": "Void"
 }

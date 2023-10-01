@@ -121,6 +121,8 @@ dependencies {
     implementation fg.deobf("curse.maven:create-328085:${dependency_create_version}")
     implementation fg.deobf("curse.maven:cloth-config-348521:${dependency_cloth_config_version}")
     implementation fg.deobf("curse.maven:ad-astra-635042:${dependency_ad_astra_version}")
+    implementation fg.deobf("curse.maven:resourceful-config-714059:${dependency_resourceful_config_version}")
+    implementation fg.deobf("curse.maven:resourceful-lib-570073:${dependency_resourceful_lib_version}")
     implementation fg.deobf("curse.maven:botarium-704113:${dependency_botarium_version}")
     implementation fg.deobf("curse.maven:gregtechceu-modern-890405:${dependency_gtceu_version}")
     implementation fg.deobf("curse.maven:ldlib-626676:${dependency_ldlib_version}")

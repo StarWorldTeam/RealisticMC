@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:overworld",
+  "generator": {
+    "settings": {
+      "structures": {
+        "structures": {}
+      },
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "minecraft:gravel",
+          "height": 10
+        },
+        {
+          "block": "minecraft:water",
+          "height": 253
+        }
+      ],
+      "biome": "realisticmc:void"
+    },
+    "type": "minecraft:flat"
+  }
+}

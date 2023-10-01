@@ -20,4 +20,8 @@ public class ConfigWrapper extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Gui.TransitiveObject
     public GameRuleConfig gameRule = new GameRuleConfig();
 
+    @ConfigEntry.Category("client")
+    @ConfigEntry.Gui.TransitiveObject
+    public ClientConfig client = new ClientConfig();
+
 }

@@ -4,7 +4,10 @@ import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import earth.terrarium.ad_astra.common.item.armor.JetSuit;
 import earth.terrarium.ad_astra.common.item.armor.SpaceSuit;
-import net.minecraft.nbt.ListTag;
+import earth.terrarium.ad_astra.common.registry.ModFluids;
+import earth.terrarium.botarium.common.energy.EnergyApi;
+import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
+import earth.terrarium.botarium.common.item.ItemStackHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -30,25 +33,19 @@ public class CreativeOxygenCan extends SwitchableItem {
         for (var armor : entity.getArmorSlots()) {
             if (armor.getItem() instanceof BacktankItem backtank) armor.getOrCreateTag().putInt("Air", BacktankUtil.maxAir(armor));
             if (armor.getItem() instanceof DivingGear gear && gear.getType() == ArmorItem.Type.CHESTPLATE) {
-                armor.getOrCreateTag().getCompound(
-                    "BotariumData"
-                ).getList(
-                    "StoredFluids", ListTag.TAG_COMPOUND
-                ).getCompound(0).putLong(
-                    "Amount", gear.getTankSize()
-                );
+                var holder = new ItemStackHolder(armor);
+                gear.insert(holder, FluidHooks.newFluidHolder(ModFluids.OXYGEN.get(), gear.getTankSize() - gear.getFluidAmount(armor), null));
             }
             if (armor.getItem() instanceof SpaceSuit suit) {
-                armor.getOrCreateTag().getCompound(
-                    "BotariumData"
-                ).getList(
-                    "StoredFluids", ListTag.TAG_COMPOUND
-                ).getCompound(0).putLong(
-                    "Amount", suit.getTankSize()
-                );
-                if (suit instanceof JetSuit jetSuit)
-                    armor.getOrCreateTag().getCompound("BotariumData").putLong("Energy", jetSuit.getEnergyStorage(armor).getMaxCapacity());
+                var holder = new ItemStackHolder(armor);
+                suit.insert(holder, FluidHooks.newFluidHolder(ModFluids.OXYGEN.get(), suit.getTankSize() - suit.getFluidAmount(armor), null));
+                if (suit instanceof JetSuit jetSuit) {
+                    var storage = EnergyApi.getItemEnergyContainer(new ItemStackHolder(armor));
+                    assert storage != null;
+                    storage.internalInsert(storage.getMaxCapacity() - storage.getStoredEnergy(), false);
+                }
             }
         }
     }
+
 }
