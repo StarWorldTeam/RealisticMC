@@ -48,8 +48,11 @@ public class RealisticMinecraft {
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::entityLayerSetup);
-        MinecraftForge.EVENT_BUS.addListener(this::onRegisterClientHud);
 
+        try {
+            Class <?>  minecraft = net.minecraft.client.Minecraft.class;
+            MinecraftForge.EVENT_BUS.addListener(this::onRegisterClientHud);
+        } catch (Throwable ignored) {}
     }
 
     private void entityLayerSetup (final EntityRenderersEvent.RegisterLayerDefinitions event) {
