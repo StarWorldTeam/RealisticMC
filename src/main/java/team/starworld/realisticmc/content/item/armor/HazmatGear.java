@@ -100,12 +100,14 @@ public class HazmatGear extends ArmorItem implements RMCArmor, FluidContainingIt
             if (player.level().getGameTime() % 40 == 0 && gear.getFluidAmount(stack) <= 0) {
                 player.hurt(player.damageSources().drown(), 2);
             }
-            if (player.level().getGameTime() % 40 == 0 && gear.getFluidAmount(stack) > 0) {
+            if (gear.getFluidAmount(stack) > 0) {
                 getEffects().forEach(player::removeEffect);
                 player.clearFire();
-                player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 80, 255, false, false));
-                var holder = new ItemStackHolder(stack);
-                extract(holder, FluidHooks.newFluidHolder(getFluid(holder.getStack()), 1, null));
+                player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 40, 255, false, false));
+                if (player.level().getGameTime() % 40 == 0) {
+                    var holder = new ItemStackHolder(stack);
+                    extract(holder, FluidHooks.newFluidHolder(getFluid(holder.getStack()), 5, null));
+                }
             }
         }
     }
