@@ -1,4 +1,4 @@
-package team.starworld.realisticmc.content.item.trinkets;
+package team.starworld.realisticmc.content.item.trinket;
 
 import com.simibubi.create.content.equipment.armor.BacktankItem;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;

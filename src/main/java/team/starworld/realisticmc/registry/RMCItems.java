@@ -4,7 +4,7 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import team.starworld.realisticmc.content.item.armor.*;
-import team.starworld.realisticmc.content.item.trinkets.*;
+import team.starworld.realisticmc.content.item.trinket.*;
 
 import static team.starworld.realisticmc.registry.RMCRegistries.REGISTRATE;
 import static team.starworld.realisticmc.registry.RMCRegistries.rl;

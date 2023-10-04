@@ -2,6 +2,7 @@ package team.starworld.realisticmc.content.item.armor;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import earth.terrarium.ad_astra.common.item.FluidContainingItem;
 import earth.terrarium.ad_astra.common.registry.ModTags;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
@@ -152,7 +153,7 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     @Override
     public void appendHoverText (@NotNull ItemStack stack, @Nullable Level level, @NotNull List <Component> list, @NotNull TooltipFlag flag) {
         if (this.getType() == Type.CHESTPLATE)
-            list.add(Component.translatable("tooltip.realisticmc.oxygen_stored", getFluidAmount(stack), getTankSize()));
+            list.add(Component.translatable("tooltip.realisticmc.fluid_stored", GTMaterials.Oxygen.getLocalizedName(), getFluidAmount(stack), getTankSize()));
     }
 
     @Override

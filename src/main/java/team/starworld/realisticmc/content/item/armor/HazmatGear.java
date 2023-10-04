@@ -1,12 +1,16 @@
 package team.starworld.realisticmc.content.item.armor;
 
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import earth.terrarium.ad_astra.common.item.FluidContainingItem;
 import earth.terrarium.ad_astra.common.registry.ModTags;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import earth.terrarium.botarium.common.item.ItemStackHolder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -36,7 +40,6 @@ import java.util.function.Consumer;
 public class HazmatGear extends ArmorItem implements RMCArmor, FluidContainingItem {
 
     protected ResourceLocation name;
-
 
     public static List <MobEffect> getEffects () {
         ArrayList <MobEffect> list = new ArrayList <> ();
@@ -130,12 +133,24 @@ public class HazmatGear extends ArmorItem implements RMCArmor, FluidContainingIt
     @Override
     public void appendHoverText (@NotNull ItemStack stack, @Nullable Level level, @NotNull List <Component> list, @NotNull TooltipFlag flag) {
         if (this.getType() == Type.CHESTPLATE)
-            list.add(Component.translatable("tooltip.realisticmc.oxygen_stored", getFluidAmount(stack), getTankSize()));
+            list.add(Component.translatable("tooltip.realisticmc.fluid_stored", GTMaterials.Oxygen.getLocalizedName(), getFluidAmount(stack), getTankSize()));
     }
 
     @Override
     public @Nullable String getArmorTexture (ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return ArmorUtils.getArmorTexture(name);
+    }
+
+    @Override
+    public boolean isDamageImmune (DamageSource source, LivingEntity entity) {
+        if (!HazmatGear.hasFullGear(entity)) return false;
+        for (var damageTypeString : ConfigWrapper.getInstance().gameRule.hazmatDamageImmune) {
+            try {
+                var damageType = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(damageTypeString));
+                if (source.is(damageType)) return true;
+            } catch (Throwable ignored) {}
+        }
+        return false;
     }
 
 }

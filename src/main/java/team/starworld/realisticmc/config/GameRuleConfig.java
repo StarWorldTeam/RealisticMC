@@ -35,6 +35,17 @@ public class GameRuleConfig implements ConfigData {
         "darkness"
     };
 
+    public String[] hazmatDamageImmune = new String[] {
+        "gtceu:radiation", "gtceu:chemical", "gtceu:electric", "gtceu:frost",
+        "gtceu:heat", "gtceu:turbine"
+    };
+
+
+    public String[] radiationItems = new String[] {
+        "*uranium", "*uraninite", "*uranium_235", "*polonium", "*radon", "*francium",
+        "*radium", "*actinium", "*thorium", "*protactinium"
+    };
+
     public static Map <Item, String> getWaterPressureResistantArmors () {
         HashMap <Item, String> map = new HashMap <> ();
         var armors = ConfigWrapper.getInstance().gameRule.waterPressureResistantArmors;
