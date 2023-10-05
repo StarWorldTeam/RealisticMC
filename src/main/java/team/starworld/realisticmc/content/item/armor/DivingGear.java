@@ -54,6 +54,14 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
             entity.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DivingGear;
     }
 
+    public static boolean hasLeggings (LivingEntity entity) {
+        return entity.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DivingGear;
+    }
+
+    public static boolean hasBoots (LivingEntity entity) {
+        return entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof DivingGear;
+    }
+
     @Override
     public int getMaxDamage (ItemStack stack) { return Integer.MAX_VALUE; }
 
@@ -121,6 +129,15 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
         if (!(player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DivingGear) || !(this.getType() == Type.CHESTPLATE)) return;
         var oxygen = getFluidAmount(stack);
         var consume = 0L;
+        if (hasFullGear(player) && hasBoots(player) && hasLeggings(player) && this.getType() == Type.CHESTPLATE && stack.getItem() instanceof DivingGear gear) {
+            if (player.level().getGameTime() % 40 == 0 && gear.getFluidAmount(stack) <= 0) {
+                player.hurt(player.damageSources().drown(), 2);
+            }
+            if (gear.getFluidAmount(stack) > 0 && player.level().getGameTime() % 40 == 0) {
+                var holder = new ItemStackHolder(stack);
+                extract(holder, FluidHooks.newFluidHolder(getFluid(holder.getStack()), 5, null));
+            }
+        }
         if (player.level().getGameTime() % 35 == 0 && oxygen > 1 && player.getAirSupply() < player.getMaxAirSupply()) {
             if ((player.getMaxAirSupply() - player.getAirSupply()) * 2L > oxygen) {
                 player.setAirSupply((int) Math.min(oxygen / 2, player.getMaxAirSupply()));

@@ -32,7 +32,9 @@ public class RMCRegistries {
         }
 
         @Override
-        public void registerMaterials () {}
+        public void registerMaterials () {
+            RMCMaterials.GTMaterials.init();
+        }
 
         @Override
         public void registerRecipeTypes () {
