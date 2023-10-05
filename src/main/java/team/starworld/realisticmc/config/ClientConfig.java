@@ -5,6 +5,6 @@ import me.shedaniel.autoconfig.annotation.Config;
 @Config(name = "client")
 public class ClientConfig implements ConfigData {
 
-    public boolean showScreenMaskInDivingGear = true;
+    public boolean showOxygen = true;
 
 }

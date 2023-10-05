@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import team.starworld.realisticmc.config.ConfigWrapper;
 
 import static team.starworld.realisticmc.registry.RMCRegistries.rl;
 
@@ -33,7 +34,7 @@ public class PlayerOverlayScreen {
         if (player.isSpectator()) {
             return;
         }
-        if (shouldRenderOxygen && !minecraft.options.renderDebug) {
+        if (ConfigWrapper.getInstance().client.showOxygen && shouldRenderOxygen && !minecraft.options.renderDebug) {
             poseStack.pushPose();
             poseStack.scale(AdAstraConfig.oxygenBarScale, AdAstraConfig.oxygenBarScale, AdAstraConfig.oxygenBarScale);
             int x = 5 + AdAstraConfig.oxygenBarXOffset;
