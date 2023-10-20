@@ -21,4 +21,5 @@ public class RMCRegistrate extends AbstractRegistrate <RMCRegistrate> {
     public @NotNull RMCRegistrate registerEventListeners (@NotNull IEventBus bus) {
         return super.registerEventListeners(bus);
     }
+
 }

@@ -24,5 +24,6 @@
     "realisticmc.electric_loom": "Electric Loom",
     "gui.realisticmc.planet.planet_deep_ocean": "Deep Ocean Planet",
     "gui.realisticmc.text.alien_galaxy": "Alien Galaxy",
-    "biome.realisticmc.void": "Void"
+    "biome.realisticmc.void": "Void",
+    "tagprefix.shaft": "%s Shaft"
 }

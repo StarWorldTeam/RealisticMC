@@ -3,6 +3,7 @@ package team.starworld.realisticmc.registry;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
+import team.starworld.realisticmc.data.resources.ResourceGenerator;
 
 import java.util.function.Consumer;
 
@@ -16,6 +17,14 @@ public class RMCRegistries {
         return new ResourceLocation(MODID, path);
     }
 
+    public static ResourceLocation rlMinecraft (String path) {
+        return new ResourceLocation("minecraft", path);
+    }
+
+    public static ResourceLocation rlPlatform (String path) {
+        return new ResourceLocation("forge", path);
+    }
+
     public static void init () {
         RMCItems.init();
     }
@@ -24,7 +33,9 @@ public class RMCRegistries {
     public static class GTAddon implements IGTAddon {
 
         @Override
-        public void initializeAddon () {}
+        public void initializeAddon () {
+            ResourceGenerator.INSTANCE.register();
+        }
 
         @Override
         public String addonModId () {
@@ -34,6 +45,11 @@ public class RMCRegistries {
         @Override
         public void registerMaterials () {
             RMCMaterials.GTMaterials.init();
+        }
+
+        @Override
+        public void registerTagPrefixes () {
+            RMCBlocks.generateShafts();
         }
 
         @Override

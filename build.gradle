@@ -126,6 +126,7 @@ dependencies {
     implementation fg.deobf("curse.maven:botarium-704113:${dependency_botarium_version}")
     implementation fg.deobf("curse.maven:gregtechceu-modern-890405:${dependency_gtceu_version}")
     implementation fg.deobf("curse.maven:ldlib-626676:${dependency_ldlib_version}")
+    implementation fg.deobf("curse.maven:selene-499980:${dependency_moonlight_version}")
 
     // Annotation Processor
     compileOnly 'org.projectlombok:lombok:1.18.24'

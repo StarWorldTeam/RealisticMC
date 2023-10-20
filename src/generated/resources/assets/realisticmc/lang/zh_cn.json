@@ -4,12 +4,12 @@
     "item.realisticmc.diving_suit": "潜水服",
     "item.realisticmc.diving_leggings": "潜水裤",
     "item.realisticmc.diving_boots": "潜水靴子",
-    "item.realisticmc.hazmat_respirator": "防化服呼吸器",
-    "item.realisticmc.hazmat_oxygen_supplier": "防化服供氧器",
-    "item.realisticmc.hazmat_leggings": "防化服护腿",
-    "item.realisticmc.hazmat_boots": "防化服靴子",
+    "item.realisticmc.hazmat_respirator": "化学品防护服面罩",
+    "item.realisticmc.hazmat_oxygen_supplier": "化学品防护服",
+    "item.realisticmc.hazmat_leggings": "化学品防护服护腿",
+    "item.realisticmc.hazmat_boots": "化学品防护服靴子",
     "item.realisticmc.diving_gear_fabric": "潜水装备布料",
-    "item.realisticmc.hazmat_gear_fabric": "防化服布料",
+    "item.realisticmc.hazmat_gear_fabric": "化学品防护服布料",
     "item.realisticmc.creative_oxygen_can": "创造模式氧气罐",
     "item.realisticmc.custom_skin_helmet": "伪装头盔",
     "item.realisticmc.custom_skin_chestplate": "伪装胸甲",
@@ -24,5 +24,6 @@
     "realisticmc.electric_loom": "电动纺织机",
     "gui.realisticmc.planet.planet_deep_ocean": "深海星",
     "gui.realisticmc.text.alien_galaxy": "外星系",
-    "biome.realisticmc.void": "虚无"
+    "biome.realisticmc.void": "虚无",
+    "tagprefix.shaft": "%s传动杆"
 }

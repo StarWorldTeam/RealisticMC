@@ -9,12 +9,27 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
+import team.starworld.realisticmc.content.block.ShaftMaterialBlock;
 
 import java.util.function.Consumer;
 
 public class RMCMachineRecipes {
 
     public static class GTRecipes {
+
+        public static void initExtruderRecipes (Consumer <FinishedRecipe> provider) {
+            var shaftBlocks = RMCBlocks.MATERIAL_BLOCKS.get("shaft");
+            if (shaftBlocks != null) for (var i : shaftBlocks) {
+                if (!(i.get() instanceof ShaftMaterialBlock block)) continue;
+                GTRecipeTypes.EXTRUDER_RECIPES.recipeBuilder(i.getId())
+                    .inputItems(GTItems.SHAPE_EXTRUDER_ROD)
+                    .inputItems(TagPrefix.block, block.getMaterial())
+                    .outputItems(i, 4)
+                    .EUt(128)
+                    .duration(80)
+                    .save(provider);
+            }
+        }
 
         public static void initAssemblerRecipes (Consumer <FinishedRecipe> provider) {
             GTRecipeTypes.ASSEMBLER_RECIPES.recipeBuilder(RMCRegistries.rl("electric_loom_hv"))
@@ -162,6 +177,7 @@ public class RMCMachineRecipes {
     public static void initGTRecipes (Consumer <FinishedRecipe> provider) {
         GTRecipes.initAssemblerRecipes(provider);
         GTRecipes.initLoomRecipes(provider);
+        GTRecipes.initExtruderRecipes(provider);
     }
 
 }
