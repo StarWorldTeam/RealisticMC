@@ -92,7 +92,7 @@ public class HazmatGear extends ArmorItem implements RMCArmor, FluidContainingIt
 
     @Override
     public boolean isBarVisible (@NotNull ItemStack stack) {
-        return getFluidAmount(stack) != getTankSize();
+        return getFluidAmount(stack) < getTankSize();
     }
 
     @Override
