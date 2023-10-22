@@ -48,9 +48,7 @@ public class RMCRegistries {
         }
 
         @Override
-        public void registerTagPrefixes () {
-            RMCBlocks.generateShafts();
-        }
+        public void registerTagPrefixes () {}
 
         @Override
         public void registerRecipeTypes () {
