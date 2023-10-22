@@ -31,6 +31,7 @@ import team.starworld.realisticmc.config.ConfigWrapper;
 import team.starworld.realisticmc.util.ArmorUtils;
 import team.starworld.realisticmc.util.ItemStackUtils;
 import team.starworld.realisticmc.util.MathUtils;
+import team.starworld.realisticmc.util.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,7 @@ public class HazmatGear extends ArmorItem implements RMCArmor, FluidContainingIt
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient (Consumer <IClientItemExtensions> consumer) {
-        consumer.accept(DivingGear.Rendering.INSTANCE);
+        consumer.accept(ModelUtils.FullArmorRendering.INSTANCE);
     }
 
     @Override

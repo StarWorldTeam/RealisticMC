@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import team.starworld.realisticmc.api.item.ComponentItem;
 import team.starworld.realisticmc.util.ArmorUtils;
 import team.starworld.realisticmc.util.ItemStackUtils;
+import team.starworld.realisticmc.util.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class CustomSkin extends ArmorItem implements ComponentItem {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient (@NotNull Consumer <IClientItemExtensions> consumer) {
-        consumer.accept(DivingGear.Rendering.INSTANCE);
+        consumer.accept(ModelUtils.FullArmorRendering.INSTANCE);
     }
 
     public ResourceLocation getSkin (ItemStack stack) {

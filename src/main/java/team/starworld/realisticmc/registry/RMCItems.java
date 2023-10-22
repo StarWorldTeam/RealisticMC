@@ -1,6 +1,9 @@
 package team.starworld.realisticmc.registry;
 
 import com.tterrag.registrate.util.entry.ItemEntry;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import team.starworld.realisticmc.content.item.armor.CustomSkin;
@@ -29,6 +32,10 @@ public class RMCItems {
     public static final ItemEntry <Item> DIVING_GEAR_FABRIC = REGISTRATE.item("diving_gear_fabric", Item::new).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <Item> HAZMAT_GEAR_FABRIC = REGISTRATE.item("hazmat_gear_fabric", Item::new).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <CreativeOxygenCan> CREATIVE_OXYGEN_CAN = REGISTRATE.item("creative_oxygen_can", CreativeOxygenCan::new).onRegister(ModelUtils::defaultItemModel).register();
+    public static final ItemEntry <Item> BUBBLE_GUM = REGISTRATE.item("bubble_gum", Item::new)
+        .properties(properties -> properties.food(new FoodProperties.Builder().alwaysEat().effect(() -> new MobEffectInstance(MobEffects.LEVITATION, 20 * 20, 1, false, false), 1).build()))
+        .onRegister(ModelUtils::defaultItemModel).register();
+
 
     public static void init () {}
 

@@ -12,7 +12,7 @@ import static team.starworld.realisticmc.RealisticMinecraft.MODID;
 public class LivingEvent {
 
     @SubscribeEvent
-    public static void onPlayerHurt (LivingHurtEvent event) {
+    public static void onLivingHurt (LivingHurtEvent event) {
         var entity = event.getEntity();
         for (var item : entity.getArmorSlots()) {
             if (item.getItem() instanceof RMCArmor armor) {

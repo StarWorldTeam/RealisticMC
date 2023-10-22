@@ -13,6 +13,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 apply plugin: 'org.spongepowered.mixin'
@@ -31,6 +32,10 @@ java {
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
     copyIdeResources = true
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+
     runs {
         client {
             workingDirectory project.file('run')
@@ -141,6 +146,7 @@ def replaceProperties = [
         mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
         mod_authors         : mod_authors, mod_description: mod_description
 ]
+
 processResources {
     inputs.properties replaceProperties
     replaceProperties.put 'project', project

@@ -15,6 +15,7 @@
     "item.realisticmc.custom_skin_chestplate": "Camouflage Chestplate",
     "item.realisticmc.custom_skin_leggings": "Camouflage Leggings",
     "item.realisticmc.custom_skin_boots": "Camouflage Boots",
+    "item.realisticmc.bubble_gum": "Bubble Gum",
     "tooltip.realisticmc.fluid_stored": "§7[%s Stored] §6%s§7/§6%s",
     "tooltip.realisticmc.energy_stored": "§7[Energy Stored] §6%s§7/§6%s",
     "death.attack.realisticmc.water_pressure": "%1$s was flattened by water pressure",
@@ -24,6 +25,5 @@
     "realisticmc.electric_loom": "Electric Loom",
     "gui.realisticmc.planet.planet_deep_ocean": "Deep Ocean Planet",
     "gui.realisticmc.text.alien_galaxy": "Alien Galaxy",
-    "biome.realisticmc.void": "Void",
-    "tagprefix.shaft": "%s Shaft"
+    "biome.realisticmc.void": "Void"
 }

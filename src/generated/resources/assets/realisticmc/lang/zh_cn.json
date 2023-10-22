@@ -15,6 +15,7 @@
     "item.realisticmc.custom_skin_chestplate": "伪装胸甲",
     "item.realisticmc.custom_skin_leggings": "伪装护腿",
     "item.realisticmc.custom_skin_boots": "伪装靴子",
+    "item.realisticmc.bubble_gum": "泡泡糖",
     "tooltip.realisticmc.fluid_stored": "§7[%s存储] §6%s§7/§6%s",
     "tooltip.realisticmc.energy_stored": "§7[能量存储] §6%s§7/§6%s",
     "death.attack.realisticmc.water_pressure": "%1$s被水压扁了",
@@ -24,6 +25,5 @@
     "realisticmc.electric_loom": "电动纺织机",
     "gui.realisticmc.planet.planet_deep_ocean": "深海星",
     "gui.realisticmc.text.alien_galaxy": "外星系",
-    "biome.realisticmc.void": "虚无",
-    "tagprefix.shaft": "%s传动杆"
+    "biome.realisticmc.void": "虚无"
 }

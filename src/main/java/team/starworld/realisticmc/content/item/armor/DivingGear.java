@@ -1,52 +1,69 @@
 package team.starworld.realisticmc.content.item.armor;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import earth.terrarium.ad_astra.common.item.FluidContainingItem;
 import earth.terrarium.ad_astra.common.registry.ModTags;
+import earth.terrarium.botarium.common.energy.base.BotariumEnergyItem;
+import earth.terrarium.botarium.common.energy.impl.SimpleEnergyContainer;
+import earth.terrarium.botarium.common.energy.impl.WrappedItemEnergyContainer;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import earth.terrarium.botarium.common.item.ItemStackHolder;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.starworld.realisticmc.api.item.armor.RMCArmor;
-import team.starworld.realisticmc.api.item.armor.model.ArmorFullModel;
 import team.starworld.realisticmc.util.ArmorUtils;
 import team.starworld.realisticmc.util.ItemStackUtils;
 import team.starworld.realisticmc.util.MathUtils;
+import team.starworld.realisticmc.util.ModelUtils;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 
-public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingItem {
+public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingItem, BotariumEnergyItem <WrappedItemEnergyContainer> {
 
-    protected ResourceLocation name;
-
-    public static final AttributeModifier SWIMMING_SPEED_MODIFIER = new AttributeModifier(UUID.fromString("89b46e4a-5feb-11ee-8c99-0242ac120002"), "diving_gear_swimming_speed", 3, AttributeModifier.Operation.MULTIPLY_BASE);
+    protected final ResourceLocation name;
 
     public DivingGear (Type type, ResourceLocation name) {
         super(ArmorMaterials.DIAMOND, type, new Item.Properties().durability(Integer.MAX_VALUE));
         this.name = name;
+    }
+
+    public static void bootsTick (LivingEntity entity) {
+        if (entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof DivingGear gear && gear.getType() == Type.BOOTS) {
+            entity.setSwimming(false);
+            Vec3 motion = entity.getDeltaMovement();
+            entity.setOnGround(entity.onGround() || entity.verticalCollision);
+            var isJumping = entity.jumping;
+            if (isJumping && entity.onGround()) {
+                motion = motion.add(0.0, 0.5, 0.0);
+                entity.setOnGround(false);
+            } else {
+                motion = motion.add(0.0, -0.05000000074505806, 0.0);
+            }
+            float multiplier = 1.3F;
+            if (motion.multiply(1.0, 0.0, 1.0).length() < 0.14499999582767487 && (entity.zza > 0.0F || entity.xxa != 0.0F) && !entity.isShiftKeyDown()) {
+                motion = motion.multiply(multiplier, 1.0, multiplier);
+            }
+            entity.setDeltaMovement(motion);
+        }
     }
 
     public static boolean hasFullGear (LivingEntity entity) {
@@ -74,22 +91,24 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     @OnlyIn(Dist.CLIENT)
     @Override
     public void initializeClient (Consumer <IClientItemExtensions> consumer) {
-        consumer.accept(Rendering.INSTANCE);
+        consumer.accept(ModelUtils.FullArmorRendering.INSTANCE);
     }
 
-    public static class Rendering implements IClientItemExtensions {
-
-        public static final Rendering INSTANCE = new Rendering();
-
-        private Rendering () {}
-
-
-        @Override
-        public @NotNull HumanoidModel <?> getHumanoidArmorModel (LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel <?> original) {
-            return equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET ? original : ArmorFullModel.INSTANCE.get();
-        }
-
+    @Override
+    public WrappedItemEnergyContainer getEnergyStorage (ItemStack stack) {
+        return new WrappedItemEnergyContainer(
+            stack,
+            new SimpleEnergyContainer(640000) {
+                public long maxInsert() {
+                return 640000L;
+            }
+                public long maxExtract() {
+                    return 640000L;
+            }
+            }
+        );
     }
+
 
     @Override
     public void inventoryTick (@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
@@ -98,7 +117,9 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
 
     @Override
     public int getBarWidth (@NotNull ItemStack stack) {
-        return Math.round(((float) getFluidAmount(stack) * 13f / (float) getTankSize()));
+        if (getType() == Type.CHESTPLATE) return Math.round(((float) getFluidAmount(stack) * 13f / (float) getTankSize()));
+        if (getType() == Type.HELMET) return Math.round(((float) getEnergyStorage(stack).getStoredEnergy() * 13f / (float) getEnergyStorage(stack).getMaxCapacity()));
+        return 0;
     }
 
     @Override
@@ -108,28 +129,34 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
 
     @Override
     public boolean isBarVisible (@NotNull ItemStack stack) {
-        return getFluidAmount(stack) < getTankSize();
-    }
-
-    @Override
-    public Multimap <Attribute, AttributeModifier> getAttributeModifiers (EquipmentSlot slot, ItemStack stack) {
-        if (this.getType() == Type.BOOTS && slot == EquipmentSlot.FEET) {
-            return Multimaps.forMap(
-                Map.of(
-                    ForgeMod.SWIM_SPEED.get(), SWIMMING_SPEED_MODIFIER
-                )
-            );
-        }
-        return super.getAttributeModifiers(slot, stack);
+        if (getType() == Type.CHESTPLATE) return getFluidAmount(stack) < getTankSize();
+        if (getType() == Type.HELMET) return getEnergyStorage(stack).getStoredEnergy() < getEnergyStorage(stack).getMaxCapacity();
+        return false;
     }
 
     @Override
     public void onArmorTick (ItemStack stack, Level level, Player player) {
         setDamage(stack, 0);
-        if (!(player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DivingGear) || !(this.getType() == Type.CHESTPLATE)) return;
+        if (player.isInFluidType()) bootsTick(player);
+        if (player.isEyeInFluidType(Fluids.WATER.getFluidType())) {
+            player.addEffect(
+                new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 255, false, false, false)
+            );
+        }
+        if (player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DivingGear chest && chest.getType() == Type.CHESTPLATE && getType() == Type.HELMET && level.getGameTime() % 40 == 0 && player.isEyeInFluidType(Fluids.WATER.getFluidType())) {
+            var chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
+            var energyStorage = getEnergyStorage(stack);
+            var oxygen = Math.min(320, Math.max(chest.getTankSize() - chest.getFluidAmount(chestItem), 0));
+            var extract = Math.min(energyStorage.getStoredEnergy(), oxygen * 2);
+            long insertOxygen = extract / 2;
+            energyStorage.internalExtract(extract, false);
+            var holder = new ItemStackHolder(chestItem);
+            insert(holder, FluidHooks.newFluidHolder(chest.getFluid(holder.getStack()), insertOxygen, null));
+        }
+        if (this.getType() != Type.CHESTPLATE) return;
         var oxygen = getFluidAmount(stack);
         var consume = 0L;
-        if (hasFullGear(player) && hasBoots(player) && hasLeggings(player) && this.getType() == Type.CHESTPLATE && stack.getItem() instanceof DivingGear gear) {
+        if (hasFullGear(player) && this.getType() == Type.CHESTPLATE && stack.getItem() instanceof DivingGear gear) {
             if (player.level().getGameTime() % 40 == 0 && gear.getFluidAmount(stack) <= 0) {
                 player.hurt(player.damageSources().drown(), 2);
             }
@@ -171,6 +198,8 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     public void appendHoverText (@NotNull ItemStack stack, @Nullable Level level, @NotNull List <Component> list, @NotNull TooltipFlag flag) {
         if (this.getType() == Type.CHESTPLATE)
             list.add(Component.translatable("tooltip.realisticmc.fluid_stored", GTMaterials.Oxygen.getLocalizedName(), getFluidAmount(stack), getTankSize()));
+        if (this.getType() == Type.HELMET)
+            list.add(Component.translatable("tooltip.realisticmc.energy_stored", getEnergyStorage(stack).getStoredEnergy(), getEnergyStorage(stack).getMaxCapacity()));
     }
 
     @Override
