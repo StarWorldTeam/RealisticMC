@@ -24,4 +24,8 @@ public class ConfigWrapper extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Gui.TransitiveObject
     public ClientConfig client = new ClientConfig();
 
+    @ConfigEntry.Category("world")
+    @ConfigEntry.Gui.TransitiveObject
+    public WorldConfig world = new WorldConfig();
+
 }

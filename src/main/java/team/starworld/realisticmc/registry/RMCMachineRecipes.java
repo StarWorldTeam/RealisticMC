@@ -111,6 +111,14 @@ public class RMCMachineRecipes {
                 .duration(60)
                 .outputItems(RMCItems.DIVING_BOOTS, 1)
                 .save(provider);
+            RMCRecipeTypes.GTRecipeTypes.ELECTRIC_LOOM_RECIPES.recipeBuilder(RMCRegistries.rl("diving_flipper"))
+                .inputItems(RMCItems.DIVING_GEAR_FABRIC, 8)
+                .circuitMeta(3)
+                .inputFluids(GTMaterials.Rubber.getFluid(1000))
+                .EUt(64)
+                .duration(60)
+                .outputItems(RMCItems.DIVING_FLIPPER, 1)
+                .save(provider);
             RMCRecipeTypes.GTRecipeTypes.ELECTRIC_LOOM_RECIPES.recipeBuilder(RMCRegistries.rl("hazmat_gear_fabric"))
                 .inputItems(GTItems.CARBON_MESH, 6)
                 .inputItems(TagPrefix.dust, GTMaterials.Lead, 4)

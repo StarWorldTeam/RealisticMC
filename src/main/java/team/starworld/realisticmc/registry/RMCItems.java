@@ -7,6 +7,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import team.starworld.realisticmc.content.item.armor.CustomSkin;
+import team.starworld.realisticmc.content.item.armor.DivingFlipper;
 import team.starworld.realisticmc.content.item.armor.DivingGear;
 import team.starworld.realisticmc.content.item.armor.HazmatGear;
 import team.starworld.realisticmc.content.item.trinket.CreativeOxygenCan;
@@ -21,6 +22,7 @@ public class RMCItems {
     public static final ItemEntry <DivingGear> DIVING_SUIT = REGISTRATE.item("diving_suit", (properties) -> new DivingGear(ArmorItem.Type.CHESTPLATE, rl("diving_gear"))).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <DivingGear> DIVING_LEGGINGS = REGISTRATE.item("diving_leggings", (properties) -> new DivingGear(ArmorItem.Type.LEGGINGS, rl("diving_gear"))).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <DivingGear> DIVING_BOOTS = REGISTRATE.item("diving_boots", (properties) -> new DivingGear(ArmorItem.Type.BOOTS, rl("diving_gear"))).onRegister(ModelUtils::defaultItemModel).register();
+    public static final ItemEntry <DivingFlipper> DIVING_FLIPPER = REGISTRATE.item("diving_flipper", (properties) -> new DivingFlipper(rl("diving_gear"), properties)).properties(properties -> properties.stacksTo(1)).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <HazmatGear> HAZMAT_RESPIRATOR = REGISTRATE.item("hazmat_respirator", (properties) -> new HazmatGear(ArmorItem.Type.HELMET, rl("hazmat_gear"))).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <HazmatGear> HAZMAT_OXYGEN_SUPPLIER = REGISTRATE.item("hazmat_oxygen_supplier", (properties) -> new HazmatGear(ArmorItem.Type.CHESTPLATE, rl("hazmat_gear"))).onRegister(ModelUtils::defaultItemModel).register();
     public static final ItemEntry <HazmatGear> HAZMAT_LEGGINGS = REGISTRATE.item("hazmat_leggings", (properties) -> new HazmatGear(ArmorItem.Type.LEGGINGS, rl("hazmat_gear"))).onRegister(ModelUtils::defaultItemModel).register();

@@ -4,53 +4,35 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.starworld.realisticmc.registry.RMCRegistries;
 
-public class SwitchableItem extends Item {
+public interface SwitchableItem {
 
-    public SwitchableItem (Properties properties) {
-        super(properties.stacksTo(1));
-    }
+    default void enabledTick (ItemStack stack, Level level, Entity entity, @Nullable Integer slot, @Nullable Boolean selected) {}
+    default void disabledTick (ItemStack stack, Level level, Entity entity, @Nullable Integer slot, @Nullable Boolean selected) {}
 
-    public void enabledTick (ItemStack stack, Level level, Entity entity, int slotId, boolean selected) {}
-    public void disabledTick (ItemStack stack, Level level, Entity entity, int slot, boolean selected) {}
-
-    @Override
-    public void inventoryTick (@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean selected) {
-        if (this.isEnabled(stack)) this.enabledTick(stack, level, entity, slotId, selected);
-        else this.disabledTick(stack, level, entity, slotId, selected);
-    }
-
-    public boolean isEnabled (ItemStack stack) {
+    default boolean isEnabled (ItemStack stack) {
         if (stack.getOrCreateTag().contains(RMCRegistries.rl("enabled").toString())) return stack.getOrCreateTag().getBoolean(RMCRegistries.rl("enabled").toString());
         else return false;
-
     }
 
-    public void toggle (ItemStack stack) {
+    default void toggle (ItemStack stack) {
         stack.getOrCreateTag().putBoolean(RMCRegistries.rl("enabled").toString(), !this.isEnabled(stack));
     }
 
-    @Override
-    public @NotNull InteractionResultHolder<ItemStack> use (@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        var stack = player.getItemInHand(hand);
-        var tag = stack.getOrCreateTag();
-        this.toggle(stack);
-        return super.use(level, player, hand);
+    default void tick (ItemStack stack, Level level, Entity entity, @Nullable Integer slot, @Nullable Boolean selected) {
+        if (isEnabled(stack)) enabledTick(stack, level, entity, slot, selected);
+        else disabledTick(stack, level, entity, slot, selected);
     }
 
-    @Override
-    public @NotNull Component getName (@NotNull ItemStack stack) {
+    default @NotNull Component getDefaultName (Component name, @NotNull ItemStack stack) {
         return MutableComponent.create(
-            super.getName(stack).getContents()
+            name.getContents()
         ).withStyle(Style.EMPTY.withColor(isEnabled(stack) ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED));
     }
 

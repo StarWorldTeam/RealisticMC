@@ -76,7 +76,7 @@ public class DivingGear extends ArmorItem implements RMCArmor, FluidContainingIt
     }
 
     public static boolean hasBoots (LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof DivingGear;
+        return entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof DivingGear || entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof DivingFlipper;
     }
 
     @Override

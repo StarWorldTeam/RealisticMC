@@ -9,11 +9,13 @@ import earth.terrarium.ad_astra.common.registry.ModFluids;
 import earth.terrarium.botarium.common.energy.EnergyApi;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import earth.terrarium.botarium.common.item.ItemStackHolder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -21,15 +23,29 @@ import team.starworld.realisticmc.api.item.SwitchableItem;
 import team.starworld.realisticmc.content.item.armor.DivingGear;
 import team.starworld.realisticmc.content.item.armor.HazmatGear;
 
-public class CreativeOxygenCan extends SwitchableItem {
+public class CreativeOxygenCan extends Item implements SwitchableItem {
 
     public CreativeOxygenCan (Properties properties) {
         super(properties);
     }
 
     @Override
-    public void enabledTick (@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
-        super.enabledTick(stack, level, entity, slot, selected);
+    public @NotNull Component getName (@NotNull ItemStack stack) {
+        return getDefaultName(super.getName(stack), stack);
+    }
+
+    @Override
+    public void inventoryTick (@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean selected) {
+        tick(stack, level, entity, slot, selected);
+    }
+
+    @Override
+    public void onUseTick (@NotNull Level level, @NotNull LivingEntity entity, @NotNull ItemStack stack, int remainingUseDuration) {
+        toggle(stack);
+    }
+
+    @Override
+    public void enabledTick (@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, Integer slot, Boolean selected) {
         entity.setAirSupply(entity.getMaxAirSupply());
         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 20, 255, false, false));
         for (var armor : entity.getArmorSlots()) {
