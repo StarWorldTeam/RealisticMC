@@ -1,0 +1,8 @@
+{
+    "galaxy": "ad_astra:milky_way",
+    "solar_system": "realisticmc:alien_galaxy",
+    "texture": "realisticmc:textures/sky/planet_deep_ocean.png",
+    "speed": 365,
+    "scale": 12,
+    "radius": 3.0
+}

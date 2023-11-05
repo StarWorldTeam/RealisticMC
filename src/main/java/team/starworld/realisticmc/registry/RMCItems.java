@@ -36,7 +36,6 @@ public class RMCItems {
         .properties(properties -> properties.food(new FoodProperties.Builder().alwaysEat().effect(() -> new MobEffectInstance(MobEffects.LEVITATION, 20 * 20, 1, false, false), 1).build()))
         .onRegister(ModelUtils::defaultItemModel).register();
 
-
     public static void init () {}
 
 }

@@ -1,6 +1,6 @@
 package team.starworld.realisticmc.registry;
 
-public class RMCBlocks {
+public class RMCBlockEntities {
 
     public static void init () {
 

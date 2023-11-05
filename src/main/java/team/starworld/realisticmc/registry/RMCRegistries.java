@@ -27,6 +27,8 @@ public class RMCRegistries {
 
     public static void init () {
         RMCItems.init();
+        RMCBlocks.init();
+        RMCBlockEntities.init();
     }
 
     @com.gregtechceu.gtceu.api.addon.GTAddon

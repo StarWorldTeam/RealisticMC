@@ -39,7 +39,6 @@ public class RealisticMinecraft {
 
     public RealisticMinecraft () {
         AutoConfig.register(ConfigWrapper.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
-
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         RMCRegistries.REGISTRATE.registerEventListeners(modEventBus);

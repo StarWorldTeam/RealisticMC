@@ -1,0 +1,16 @@
+{
+  "translation": "gui.realisticmc.planet.planet_deep_ocean",
+  "galaxy": "ad_astra:milky_way",
+  "solar_system": "realisticmc:alien_galaxy",
+  "world": "realisticmc:planet_x",
+  "orbit_world": "realisticmc:planet_x_orbit",
+  "rocket_tier": 3,
+  "gravity": 1.625,
+  "has_atmosphere": false,
+  "days_in_year": 365,
+  "temperature": 24,
+  "solar_power": 13,
+  "orbit_solar_power": 30,
+  "has_oxygen": false,
+  "button_color": "grey"
+}
